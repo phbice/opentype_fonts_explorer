@@ -187,6 +187,18 @@ class TableRecord(_Table):
         (uint32, 'length', 'Length of this table')
     )
 
+class GDEFHeader(_Table):
+    structure = (
+        (uint16, 'majorVersion', 'Major version of the GDEF table, = 1'),
+        (uint16, 'minorVersion', 'Ninor version of the GDEF table, = 0/2/3'),
+        (Offset16, 'glyphClassDefOffset', 'Offset to class definition table for glyph type, from beginning of GDEF header (may be NULL'),
+        (Offset16, 'attachListOffset', 'Offset to attachment point list table, from beginning of GDEF header (may be NULL'),
+        (Offset16, 'ligCaretListOffset', 'Offset to ligature caret list table, from beginning of GDEF header (may be NULL)'),
+        (Offset16, 'markAttachClassDefOffset', 'Offset to class definition table for mark attachment type, from beginning of GDEF header (may be NULL)'),
+        ()
+    )
+
+
 class Font:
     '''读取字体文件，提供对字体数据的访问方法'''
     def __init__(self, filename):
@@ -208,10 +220,8 @@ if __name__ == '__main__':
     font = Font('DejaVuSans.ttf')
     print('-'*15 + 'offset table' + '-'*15)
     for name, value in font.offset_table.items():
-        print(f'{name: <14}{str(value): <14}'
-            f'{OffsetTable.descriptions[name]: <14}')
+        print(f'{name: <14}{str(value): <14}')
     for table_record in font.table_records:
         print('-'*15 + 'table record' + '-'*15)
         for name, value in table_record.items():
-            print(f'{name: <14}{str(value): <14}'
-                f'{TableRecord.descriptions[name]: <14}')
+            print(f'{name: <14}{str(value): <14}')
